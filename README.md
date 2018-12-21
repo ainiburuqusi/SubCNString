@@ -11,15 +11,15 @@
 
 maven导出SubCNS模块，并配置application.properties文件
 
-//项目访问路径
-server.context-path=/
-//项目访问端口
+##项目访问路径
+server.context-path=/    
+##项目访问端口
 server.port=9527
-//session失效时间
+##session失效时间
 server.session.timeout=30
-//编码格式
+##编码格式
 server.tomcat.uri-encoding=utf-8
-//词库生成路径，初始化请将项目根目录chars.dbs文件方式到配置好的路径下，初始化基本词库。
+##词库生成路径，初始化请将项目根目录chars.dbs文件方式到配置好的路径下，初始化基本词库。
 db.path=D:\\temp\\db
-//后台管理id，暂未使用
+##后台管理id，暂未使用
 manager.id=Wkdo,lg.wkaugltjwnmtne
