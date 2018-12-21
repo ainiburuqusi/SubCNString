@@ -7,12 +7,15 @@ import java.util.Map;
 import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.lianger.submessage.context.Context;
 import com.lianger.submessage.handler.BaseSubHandler;
 
 @RestController
@@ -21,6 +24,9 @@ public class ClientController {
 	
 	private static final Logger logger =LoggerFactory.getLogger(ClientController.class);
 
+	@Value("${manager.id}")
+	private String managerId;
+	
 	/**
 	 * 
 	 * @param resType 需要返回的类型分词类型
@@ -56,5 +62,47 @@ public class ClientController {
 		}
 		
 		return JSON.toJSONString(resMap);
+	}
+	/**
+	 * 
+	 * @param managerId 配置文件中的manager.id
+	 * @param {"chars":"张亮最帅"}
+	 * @return
+	 */
+	@RequestMapping(value="addChars",method=RequestMethod.PUT)
+	public String addChars(@RequestHeader(value="managerId",required=true)String managerId,@RequestBody(required=true) Map params){
+		Map<String, Object> resMap = new HashMap<String, Object>();
+		String chars = MapUtils.getString(params, "chars", "");
+		if (managerId.equals(this.managerId)) {
+			if (Context.put(chars)) {
+				resMap.put("retcode", "0");
+				resMap.put("message", "SUCCESS");
+			}else{
+				resMap.put("retcode", "1");
+				resMap.put("message", "chars exists");
+			}
+		}else{
+			resMap.put("retcode", "1");
+			resMap.put("message", "put managerId to request header");
+		}
+		return  JSON.toJSONString(resMap);
+	}
+	@RequestMapping(value="removeChars",method=RequestMethod.DELETE)
+	public String removeChars(@RequestHeader(value="managerId",required=true)String managerId,@RequestBody(required=true) Map params){
+		Map<String, Object> resMap = new HashMap<String, Object>();
+		String chars = MapUtils.getString(params, "chars", "");
+		if (managerId.equals(this.managerId)) {
+			if (Context.remove(chars)) {
+				resMap.put("retcode", "0");
+				resMap.put("message", "SUCCESS");
+			}else{
+				resMap.put("retcode", "1");
+				resMap.put("message", "chars not exists");
+			}
+		}else{
+			resMap.put("retcode", "1");
+			resMap.put("message", "put managerId to request header");
+		}
+		return  JSON.toJSONString(resMap);
 	}
 }

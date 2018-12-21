@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.lianger.submessage.model.CharsEntity;
+import com.lianger.submessage.thread.DaemonThread;
 import com.lianger.submessage.utils.ResourcesUtil;
 @Component
 public class Context {
@@ -31,10 +32,15 @@ public class Context {
 	
 	private static String dbPath;
 	
+	private static int backupsTime;
+	
 
 	static{
 		dbPath =ResourcesUtil.getProperties("db.path");
 		Context.init();
+		backupsTime = Integer.parseInt(ResourcesUtil.getProperties("backups.time"));
+		Thread t = new Thread(new DaemonThread(backupsTime));
+		t.start();
 	}
 	
 	public static boolean put(String unicode) {
