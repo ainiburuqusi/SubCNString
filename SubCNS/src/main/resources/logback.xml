@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d %5p | %t | %-25logger{25} | %m | %n</pattern>
+			<charset>utf-8</charset>
+		</encoder>
+	</appender>
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/nxbank/logs/service/scns/scns.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
+			<fileNamePattern>/nxbank/logs/service/scns/scns.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d %5p | %t | %logger{100} - %msg%n</pattern>
+			<charset>utf-8</charset>
+		</encoder>
+	</appender>
+
+
+	<logger name="org.springframework">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="com.lianger">
+		<level value="DEBUG" />
+	</logger>
+
+	<root>
+		<level value="DEBUG" />
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>
